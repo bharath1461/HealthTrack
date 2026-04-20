@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 import {
   Home,
   Pill,
-  MonitorHeart,
+  HeartPulse,
   FileText,
   Settings,
   Menu,
@@ -17,7 +17,7 @@ import {
 const navItems = [
   { href: "/dashboard", label: "Home", icon: Home },
   { href: "/medications", label: "Meds", icon: Pill },
-  { href: "/health", label: "Health", icon: MonitorHeart },
+  { href: "/health", label: "Health", icon: HeartPulse },
   { href: "/reports", label: "Reports", icon: FileText },
   { href: "/settings", label: "Settings", icon: Settings },
 ];

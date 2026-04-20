@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Mail, Lock, User, MonitorHeart } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, HeartPulse } from "lucide-react";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -101,7 +101,7 @@ export default function RegisterPage() {
         <div className="mb-10 text-center md:text-left md:pl-2">
           <div className="inline-flex items-center gap-2 mb-4">
             <div className="w-10 h-10 bg-teal-700 rounded-xl flex items-center justify-center shadow-lg shadow-teal-700/20">
-              <MonitorHeart className="w-5 h-5 text-white" />
+              <HeartPulse className="w-5 h-5 text-white" />
             </div>
             <h1 className="text-2xl font-bold tracking-tighter text-teal-700">
               HealthTrack

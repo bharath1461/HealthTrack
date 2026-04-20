@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {
   Pill,
-  MonitorHeart,
+  HeartPulse,
   FileText,
   ArrowRight,
   Shield,
@@ -118,7 +118,7 @@ export default function LandingPage() {
                 <div className="bg-white p-4 rounded-xl shadow-lg border border-stone-100 transform rotate-2 mt-4 ml-8">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-red-50 flex items-center justify-center">
-                      <MonitorHeart className="w-4 h-4 text-red-500" />
+                      <HeartPulse className="w-4 h-4 text-red-500" />
                     </div>
                     <div>
                       <p className="text-xs text-stone-500">Heart Rate</p>
@@ -172,7 +172,7 @@ export default function LandingPage() {
               {/* Health Logs */}
               <div className="group bg-white p-10 rounded-2xl hover:shadow-xl transition-all duration-500">
                 <div className="w-14 h-14 rounded-2xl bg-red-50 flex items-center justify-center text-red-500 mb-8 group-hover:scale-110 transition-transform">
-                  <MonitorHeart className="w-7 h-7" />
+                  <HeartPulse className="w-7 h-7" />
                 </div>
                 <h3 className="text-2xl font-bold text-stone-900 mb-4">
                   Health Logs
