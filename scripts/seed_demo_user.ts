@@ -1,110 +1,105 @@
-"use server";
-
-import { createClient } from "@/lib/supabase/server";
-
 /**
- * Demo user credentials
+ * Demo User Seed Script
+ * 
+ * This is a STANDALONE script — do NOT run it as part of the Next.js app.
+ * 
+ * To use: sign up manually on the app with these credentials:
+ *   Email:    demo_user@example.com
+ *   Password: DemoPass123!
+ *
+ * Then add sample data via the app UI, or run this script with:
+ *   npx tsx scripts/seed_demo_user.ts
  */
+
+import { createClient } from "@supabase/supabase-js";
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://rczzocdvttybkqutvezc.supabase.co";
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
+
 const DEMO_EMAIL = "demo_user@example.com";
 const DEMO_PASSWORD = "DemoPass123!";
 
-/**
- * Run this script with `node scripts/seed_demo_user.js` (or ts-node) after setting up your Supabase env vars.
- * It will:
- *   1. Sign up the demo user (or retrieve if exists).
- *   2. Insert a profile record.
- *   3. Insert sample medications, dose logs, health logs, and notifications.
- */
 async function seedDemoUser() {
-  const supabase = createClient();
+  if (!SUPABASE_ANON_KEY) {
+    console.error("Missing NEXT_PUBLIC_SUPABASE_ANON_KEY. Set it in .env.local or as an env var.");
+    process.exit(1);
+  }
 
-  // Sign up / sign in the demo user
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Sign up the demo user
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email: DEMO_EMAIL,
     password: DEMO_PASSWORD,
-    options: { emailRedirectTo: "http://localhost:3000" },
   });
 
   let userId: string | undefined;
-  if (signUpError && signUpError.message.includes("User already registered")) {
-    // User exists, sign in
+  if (signUpError && signUpError.message.includes("already registered")) {
     const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
       email: DEMO_EMAIL,
       password: DEMO_PASSWORD,
     });
     if (signInError) {
-      console.error("Failed to sign in demo user:", signInError.message);
+      console.error("Sign in failed:", signInError.message);
       return;
     }
     userId = signInData.user?.id;
   } else if (signUpError) {
-    console.error("Failed to sign up demo user:", signUpError.message);
+    console.error("Sign up failed:", signUpError.message);
     return;
   } else {
     userId = signUpData.user?.id;
   }
 
   if (!userId) {
-    console.error("Could not determine demo user ID.");
+    console.error("Could not determine user ID.");
     return;
   }
 
-  // Upsert profile
-  await supabase.from("profiles").upsert({
-    id: userId,
-    display_name: "Demo User",
-    updated_at: new Date().toISOString(),
-  });
+  console.log("Demo user ID:", userId);
 
-  // Sample medications
+  // Profile
+  await supabase.from("profiles").upsert({ id: userId, display_name: "Demo User", updated_at: new Date().toISOString() });
+
+  // Medications
   const meds = [
-    { name: "Aspirin", dosage: "100 mg", stock: 30, is_active: true },
-    { name: "Metformin", dosage: "500 mg", stock: 15, is_active: true },
+    { user_id: userId, name: "Aspirin", dosage: "100 mg", schedule: "Morning", stock: 30, is_active: true },
+    { user_id: userId, name: "Metformin", dosage: "500 mg", schedule: "After lunch", stock: 15, is_active: true },
+    { user_id: userId, name: "Vitamin D", dosage: "1000 IU", schedule: "Morning", stock: 60, is_active: true },
   ];
-  const { data: medData, error: medError } = await supabase.from("medications").upsert(
-    meds.map((m) => ({ ...m, user_id: userId })),
-    { onConflict: "id" }
-  );
-  if (medError) console.error("Med insert error:", medError.message);
+  const { data: medData, error: medErr } = await supabase.from("medications").insert(meds).select();
+  if (medErr) console.error("Meds error:", medErr.message);
+  else console.log("Inserted", medData.length, "medications");
 
-  // Sample dose logs for next 3 days
-  const now = new Date();
-  const doseLogs = [];
-  for (let i = 0; i < 3; i++) {
-    const day = new Date(now);
-    day.setDate(now.getDate() + i);
-    const scheduled = new Date(day);
-    scheduled.setHours(9, 0, 0, 0);
-    doseLogs.push({
-      medication_id: medData?.[0]?.id,
-      scheduled_time: scheduled.toISOString(),
-      status: "pending",
+  // Dose logs for today
+  if (medData) {
+    const now = new Date();
+    const doses = medData.map((m: any) => ({
       user_id: userId,
-    });
+      medication_id: m.id,
+      scheduled_time: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0).toISOString(),
+      status: "pending",
+    }));
+    const { error: doseErr } = await supabase.from("dose_logs").insert(doses);
+    if (doseErr) console.error("Dose logs error:", doseErr.message);
+    else console.log("Inserted", doses.length, "dose logs");
   }
-  const { error: doseError } = await supabase.from("dose_logs").upsert(doseLogs);
-  if (doseError) console.error("Dose log error:", doseError.message);
 
-  // Sample health logs
+  // Health logs
+  const now = new Date();
   const healthLogs = [
-    { type: "sleep", value: "7", recorded_at: now.toISOString(), user_id: userId },
-    { type: "steps", value: "8000", recorded_at: now.toISOString(), user_id: userId },
-    { type: "heart_rate", value: "72", recorded_at: now.toISOString(), user_id: userId },
+    { user_id: userId, type: "sleep", value: 7, recorded_at: now.toISOString() },
+    { user_id: userId, type: "steps", value: 8500, recorded_at: now.toISOString() },
+    { user_id: userId, type: "heart_rate", value: 72, recorded_at: now.toISOString() },
+    { user_id: userId, type: "weight", value: 70, recorded_at: now.toISOString() },
   ];
-  const { error: healthError } = await supabase.from("health_logs").upsert(healthLogs);
-  if (healthError) console.error("Health log error:", healthError.message);
+  const { error: hlErr } = await supabase.from("health_logs").insert(healthLogs);
+  if (hlErr) console.error("Health logs error:", hlErr.message);
+  else console.log("Inserted", healthLogs.length, "health logs");
 
-  // Sample notifications
-  const notifications = [
-    { title: "Welcome!", message: "Your demo account is ready.", user_id: userId },
-    { title: "Reminder", message: "Take your Aspirin at 9 AM.", user_id: userId },
-  ];
-  const { error: notifError } = await supabase.from("notifications").upsert(notifications);
-  if (notifError) console.error("Notification error:", notifError.message);
-
-  console.log("Demo user seeded successfully!");
-  console.log(`Email: ${DEMO_EMAIL}`);
-  console.log(`Password: ${DEMO_PASSWORD}`);
+  console.log("\n✅ Demo user seeded!");
+  console.log(`   Email:    ${DEMO_EMAIL}`);
+  console.log(`   Password: ${DEMO_PASSWORD}`);
 }
 
 seedDemoUser();
