@@ -87,12 +87,12 @@ export default function ProtectedLayout({
           </div>
           <div className="hidden md:block" />
           <div className="flex items-center space-x-4">
-            <button className="p-2 rounded-full hover:bg-stone-100/50 transition-colors text-stone-500">
+            <Link href="/notifications" className="p-2 rounded-full hover:bg-stone-100/50 transition-colors text-stone-500">
               <Bell className="w-5 h-5" />
-            </button>
-            <div className="h-8 w-8 rounded-full bg-teal-700 flex items-center justify-center text-white text-sm font-bold">
+            </Link>
+            <Link href="/profile" className="h-8 w-8 rounded-full bg-teal-700 flex items-center justify-center text-white text-sm font-bold">
               U
-            </div>
+            </Link>
           </div>
         </div>
       </header>

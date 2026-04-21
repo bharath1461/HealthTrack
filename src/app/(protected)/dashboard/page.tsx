@@ -14,6 +14,8 @@ import {
   Clock,
 } from "lucide-react";
 import { DoseAction } from "@/components/dose-action";
+import { DashboardCharts } from "@/components/dashboard-charts";
+import { InsightsPanel, generateInsights } from "@/components/insights";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -56,12 +58,36 @@ export default async function DashboardPage() {
   // Calculate adherence (last 7 days)
   const { data: weekDoseLogs } = await supabase
     .from("dose_logs")
-    .select("status")
+    .select("status, scheduled_time")
     .gte("scheduled_time", sevenDaysAgo);
 
   const totalDoses = weekDoseLogs?.length || 0;
   const takenDoses = weekDoseLogs?.filter((d) => d.status === "taken").length || 0;
   const adherencePercent = totalDoses > 0 ? Math.round((takenDoses / totalDoses) * 100) : 0;
+
+  // Build daily adherence data for chart
+  const adherenceByDay: { day: string; percentage: number }[] = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+    const dayStart = new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString();
+    const dayEnd = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).toISOString();
+    const dayDoses = weekDoseLogs?.filter(
+      (dl) => dl.scheduled_time >= dayStart && dl.scheduled_time < dayEnd
+    ) || [];
+    const dayTaken = dayDoses.filter((dl) => dl.status === "taken").length;
+    adherenceByDay.push({
+      day: d.toLocaleDateString("en-IN", { weekday: "short" }),
+      percentage: dayDoses.length > 0 ? Math.round((dayTaken / dayDoses.length) * 100) : 0,
+    });
+  }
+
+  // Generate insights
+  const insights = generateInsights({
+    medications: medications || [],
+    doseLogs: doseLogs || [],
+    healthLogs: healthLogs || [],
+    adherencePercent,
+  });
 
   // Low stock medications
   const lowStockMeds = medications?.filter((m) => m.stock !== null && m.stock <= 5) || [];
@@ -113,17 +139,7 @@ export default async function DashboardPage() {
           <p className="text-xs text-stone-400 mt-1">7-day average</p>
         </div>
 
-        {/* Active Meds */}
-        <div className="bg-white rounded-2xl p-5 border border-stone-100">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold text-stone-400 uppercase tracking-widest">Active Meds</span>
-            <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
-              <Pill className="w-4 h-4 text-blue-600" />
-            </div>
-          </div>
-          <p className="text-3xl font-extrabold text-stone-900">{medications?.length || 0}</p>
-          <p className="text-xs text-stone-400 mt-1">medications</p>
-        </div>
+
 
         {/* Today's Doses */}
         <div className="bg-white rounded-2xl p-5 border border-stone-100">
@@ -166,50 +182,59 @@ export default async function DashboardPage() {
             </Link>
           </div>
 
-          {doseLogs && doseLogs.length > 0 ? (
+          {medications && medications.length > 0 ? (
             <div className="divide-y divide-stone-50">
-              {doseLogs.map((dose) => (
-                <div
-                  key={dose.id}
-                  className="flex items-center justify-between px-6 py-4 hover:bg-stone-50/50 transition-colors"
-                >
-                  <div className="flex items-center gap-4">
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                        dose.status === "taken"
-                          ? "bg-emerald-50 text-emerald-600"
-                          : dose.status === "missed"
-                          ? "bg-red-50 text-red-500"
-                          : dose.status === "skipped"
-                          ? "bg-amber-50 text-amber-600"
-                          : "bg-teal-50 text-teal-700"
-                      }`}
-                    >
-                      <Pill className="w-5 h-5" />
+              {medications.map((med) => {
+                // Find today's dose log for this medication (if any)
+                const todayDose = doseLogs?.find((d: any) => d.medication_id === med.id);
+                const status = todayDose?.status || "no-log";
+                return (
+                  <div
+                    key={med.id}
+                    className="flex items-center justify-between px-6 py-4 hover:bg-stone-50/50 transition-colors"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                          status === "taken"
+                            ? "bg-emerald-50 text-emerald-600"
+                            : status === "missed"
+                            ? "bg-red-50 text-red-500"
+                            : status === "skipped"
+                            ? "bg-amber-50 text-amber-600"
+                            : "bg-teal-50 text-teal-700"
+                        }`}
+                      >
+                        <Pill className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-stone-900 text-sm">
+                          {med.name}
+                        </p>
+                        <p className="text-xs text-stone-400">
+                          {med.dosage}
+                          {med.schedule ? ` · ${med.schedule}` : ""}
+                          {med.stock !== null ? ` · ${med.stock} left` : ""}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-semibold text-stone-900 text-sm">
-                        {dose.medications?.name || "Medication"}
-                      </p>
-                      <p className="text-xs text-stone-400">
-                        {dose.medications?.dosage} &middot;{" "}
-                        {new Date(dose.scheduled_time).toLocaleTimeString("en-IN", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
+                    {todayDose ? (
+                      <DoseAction doseId={todayDose.id} currentStatus={todayDose.status} />
+                    ) : (
+                      <span className="text-xs font-medium text-stone-400 bg-stone-50 px-3 py-1.5 rounded-lg">
+                        No dose today
+                      </span>
+                    )}
                   </div>
-                  <DoseAction doseId={dose.id} currentStatus={dose.status} />
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="px-6 py-12 text-center">
               <div className="w-14 h-14 rounded-2xl bg-stone-50 flex items-center justify-center mx-auto mb-4">
                 <Pill className="w-7 h-7 text-stone-300" />
               </div>
-              <p className="text-stone-500 font-medium mb-1">No doses scheduled today</p>
+              <p className="text-stone-500 font-medium mb-1">No medications yet</p>
               <p className="text-sm text-stone-400 mb-6">
                 Add medications to start tracking your doses.
               </p>
@@ -296,6 +321,12 @@ export default async function DashboardPage() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* Adherence Chart + Insights */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DashboardCharts adherenceData={adherenceByDay} />
+        <InsightsPanel insights={insights} />
       </div>
 
       {/* Quick Actions */}
