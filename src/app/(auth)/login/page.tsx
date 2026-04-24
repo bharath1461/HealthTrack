@@ -23,6 +23,17 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
 
+    // Basic guard for env/config issues
+    const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+      setError(
+        "Supabase configuration is missing. Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set in .env.local."
+      );
+      setLoading(false);
+      return;
+    }
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -34,8 +45,15 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/dashboard");
-    router.refresh();
+    // Verify the user session exists before navigation
+    const { data } = await supabase.auth.getUser();
+    if (data?.user) {
+      router.push("/dashboard");
+      router.refresh();
+    } else {
+      setError("Sign-in successful, but unable to establish session. Please try again.");
+      setLoading(false);
+    }
   };
 
   const handleGoogleLogin = async () => {

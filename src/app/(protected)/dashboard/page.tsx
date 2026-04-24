@@ -39,12 +39,35 @@ export default async function DashboardPage() {
     .order("created_at", { ascending: false });
 
   // Fetch today's dose logs
-  const { data: doseLogs } = await supabase
+  let { data: doseLogs } = await supabase
     .from("dose_logs")
     .select("*, medications(name, dosage)")
     .gte("scheduled_time", startOfDay)
     .lt("scheduled_time", endOfDay)
     .order("scheduled_time", { ascending: true });
+
+  // Auto-create pending dose_logs for active medications that don't have one today
+  if (medications && medications.length > 0 && user) {
+    const medsWithLogs = new Set(doseLogs?.map((d: any) => d.medication_id) || []);
+    const medsNeedingLogs = medications.filter((m) => !medsWithLogs.has(m.id));
+    if (medsNeedingLogs.length > 0) {
+      const newLogs = medsNeedingLogs.map((m) => ({
+        user_id: user.id,
+        medication_id: m.id,
+        scheduled_time: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0).toISOString(),
+        status: "pending",
+      }));
+      await supabase.from("dose_logs").insert(newLogs);
+      // Re-fetch dose logs after insert
+      const { data: refreshedLogs } = await supabase
+        .from("dose_logs")
+        .select("*, medications(name, dosage)")
+        .gte("scheduled_time", startOfDay)
+        .lt("scheduled_time", endOfDay)
+        .order("scheduled_time", { ascending: true });
+      doseLogs = refreshedLogs;
+    }
+  }
 
   // Fetch recent health logs (last 7 days)
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
