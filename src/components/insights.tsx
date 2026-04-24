@@ -22,25 +22,25 @@ const ICONS = {
 };
 
 const TYPE_STYLES = {
-  warning: "bg-amber-50 border-amber-100 text-amber-800",
-  alert: "bg-red-50 border-red-100 text-red-800",
-  info: "bg-blue-50 border-blue-100 text-blue-800",
+  warning: "bg-amber-50 dark:bg-amber-950/20 border-amber-100 dark:border-amber-900 text-amber-800 dark:text-amber-400",
+  alert: "bg-red-50 dark:bg-red-950/20 border-red-100 dark:border-red-900 text-red-800 dark:text-red-400",
+  info: "bg-blue-50 dark:bg-blue-950/20 border-blue-100 dark:border-blue-900 text-blue-800 dark:text-blue-400",
 };
 
 const ICON_STYLES = {
-  warning: "bg-amber-100 text-amber-700",
-  alert: "bg-red-100 text-red-600",
-  info: "bg-blue-100 text-blue-700",
+  warning: "bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300",
+  alert: "bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-300",
+  info: "bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300",
 };
 
 export function InsightsPanel({ insights }: { insights: Insight[] }) {
   if (insights.length === 0) return null;
 
   return (
-    <div className="bg-white rounded-2xl border border-stone-100 overflow-hidden">
-      <div className="px-6 py-5 border-b border-stone-50 flex items-center gap-2">
+    <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 overflow-hidden">
+      <div className="px-6 py-5 border-b border-stone-50 dark:border-stone-800 flex items-center gap-2">
         <AlertTriangle className="w-4 h-4 text-amber-600" />
-        <h2 className="text-lg font-bold text-stone-900">Insights & Alerts</h2>
+        <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100">Insights & Alerts</h2>
       </div>
       <div className="p-4 space-y-3">
         {insights.map((insight) => (

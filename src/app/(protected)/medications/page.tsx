@@ -58,7 +58,7 @@ export default async function MedicationsPage() {
             return (
               <div
                 key={med.id}
-                className="bg-white rounded-2xl border border-stone-100 p-5 hover:shadow-md transition-all group"
+                className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 p-5 hover:border-teal-200 dark:hover:border-teal-800 hover:shadow-md transition-all group"
               >
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl bg-teal-50 flex items-center justify-center text-teal-700 shrink-0">
@@ -111,10 +111,10 @@ export default async function MedicationsPage() {
                         <span
                           className={`text-xs font-bold px-3 py-1.5 rounded-lg ${
                             adherence >= 80
-                              ? "bg-emerald-50 text-emerald-700"
+                              ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
                               : adherence >= 50
-                              ? "bg-amber-50 text-amber-700"
-                              : "bg-red-50 text-red-600"
+                              ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400"
+                              : "bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400"
                           }`}
                         >
                           {adherence}% adherence
@@ -128,14 +128,14 @@ export default async function MedicationsPage() {
           })}
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-stone-100 p-16 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-stone-50 flex items-center justify-center mx-auto mb-5">
-            <Pill className="w-8 h-8 text-stone-300" />
+        <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 p-16 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-stone-50 dark:bg-stone-800 flex items-center justify-center mx-auto mb-5">
+            <Pill className="w-8 h-8 text-stone-300 dark:text-stone-600" />
           </div>
-          <h3 className="font-bold text-stone-900 text-lg mb-2">
+          <h3 className="font-semibold text-stone-900 dark:text-stone-100 text-lg mb-1 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">
             No medications yet
           </h3>
-          <p className="text-stone-500 text-sm mb-8 max-w-sm mx-auto">
+          <p className="text-stone-500 dark:text-stone-400 text-sm mb-8 max-w-sm mx-auto">
             Add your first medication to start tracking doses, managing stock,
             and building your health routine.
           </p>

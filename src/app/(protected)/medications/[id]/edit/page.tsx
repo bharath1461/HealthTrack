@@ -128,7 +128,7 @@ export default function EditMedicationPage() {
         )}
 
         {/* Identity */}
-        <div className="bg-white rounded-2xl border border-stone-100 p-6 space-y-5">
+        <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 p-6 space-y-5">
           <h2 className="text-sm font-bold text-stone-400 uppercase tracking-widest">
             Identity
           </h2>
@@ -151,7 +151,7 @@ export default function EditMedicationPage() {
         </div>
 
         {/* Schedule */}
-        <div className="bg-white rounded-2xl border border-stone-100 p-6 space-y-5">
+        <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 p-6 space-y-5">
           <h2 className="text-sm font-bold text-stone-400 uppercase tracking-widest">Schedule</h2>
           <div className="space-y-1.5">
             <Label htmlFor="frequency" className="text-sm font-semibold text-stone-600">Frequency</Label>
@@ -188,7 +188,7 @@ export default function EditMedicationPage() {
         </div>
 
         {/* Inventory & Status */}
-        <div className="bg-white rounded-2xl border border-stone-100 p-6 space-y-5">
+        <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 p-6 space-y-5">
           <h2 className="text-sm font-bold text-stone-400 uppercase tracking-widest">Inventory & Status</h2>
           <div className="space-y-1.5">
             <Label htmlFor="stock" className="text-sm font-semibold text-stone-600">Stock</Label>

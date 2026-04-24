@@ -138,10 +138,10 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       {/* Hero Header */}
       <header className="max-w-3xl">
-        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-stone-900 mb-1">
+        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-stone-900 dark:text-stone-100 mb-1">
           {greeting}, {displayName}.
         </h1>
-        <p className="text-base text-stone-500 leading-relaxed">
+        <p className="text-base text-stone-500 dark:text-stone-400 leading-relaxed">
           {pendingDoses.length > 0
             ? `You have ${pendingDoses.length} dose${pendingDoses.length > 1 ? "s" : ""} scheduled for today.`
             : "Your restorative journey is on track."}
@@ -151,42 +151,42 @@ export default async function DashboardPage() {
       {/* Quick Stats Row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Adherence */}
-        <div className="bg-white rounded-2xl p-5 border border-stone-100">
+        <div className="bg-white dark:bg-stone-900 rounded-2xl p-5 border border-stone-100 dark:border-stone-800">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-bold text-stone-400 uppercase tracking-widest">Adherence</span>
-            <div className="w-8 h-8 rounded-full bg-teal-50 flex items-center justify-center">
-              <TrendingUp className="w-4 h-4 text-teal-700" />
+            <div className="w-8 h-8 rounded-full bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center">
+              <TrendingUp className="w-4 h-4 text-teal-700 dark:text-teal-400" />
             </div>
           </div>
-          <p className="text-3xl font-extrabold text-stone-900">{adherencePercent}%</p>
+          <p className="text-3xl font-extrabold text-stone-900 dark:text-stone-100">{adherencePercent}%</p>
           <p className="text-xs text-stone-400 mt-1">7-day average</p>
         </div>
 
 
 
         {/* Today's Doses */}
-        <div className="bg-white rounded-2xl p-5 border border-stone-100">
+        <div className="bg-white dark:bg-stone-900 rounded-2xl p-5 border border-stone-100 dark:border-stone-800">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-bold text-stone-400 uppercase tracking-widest">Today</span>
-            <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center">
-              <Clock className="w-4 h-4 text-emerald-600" />
+            <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center">
+              <Clock className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             </div>
           </div>
-          <p className="text-3xl font-extrabold text-stone-900">
+          <p className="text-3xl font-extrabold text-stone-900 dark:text-stone-100">
             {completedDoses.length}/{doseLogs?.length || 0}
           </p>
           <p className="text-xs text-stone-400 mt-1">doses taken</p>
         </div>
 
         {/* Health Logs */}
-        <div className="bg-white rounded-2xl p-5 border border-stone-100">
+        <div className="bg-white dark:bg-stone-900 rounded-2xl p-5 border border-stone-100 dark:border-stone-800">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-bold text-stone-400 uppercase tracking-widest">Logged</span>
-            <div className="w-8 h-8 rounded-full bg-rose-50 flex items-center justify-center">
-              <HeartPulse className="w-4 h-4 text-rose-500" />
+            <div className="w-8 h-8 rounded-full bg-rose-50 dark:bg-rose-900/20 flex items-center justify-center">
+              <HeartPulse className="w-4 h-4 text-rose-500 dark:text-rose-400" />
             </div>
           </div>
-          <p className="text-3xl font-extrabold text-stone-900">{healthLogs?.length || 0}</p>
+          <p className="text-3xl font-extrabold text-stone-900 dark:text-stone-100">{healthLogs?.length || 0}</p>
           <p className="text-xs text-stone-400 mt-1">last 7 days</p>
         </div>
       </div>
@@ -194,19 +194,19 @@ export default async function DashboardPage() {
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Today's Medications - Takes 2 columns */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-stone-100 overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-5 border-b border-stone-50">
-            <h2 className="text-lg font-bold text-stone-900">Today&apos;s Medications</h2>
+        <div className="lg:col-span-2 bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-5 border-b border-stone-50 dark:border-stone-800">
+            <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100">Today&apos;s Medications</h2>
             <Link
               href="/medications"
-              className="text-sm font-bold text-teal-700 hover:underline underline-offset-4 flex items-center gap-1"
+              className="text-sm font-bold text-teal-700 dark:text-teal-400 hover:underline underline-offset-4 flex items-center gap-1"
             >
               View All <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
           {medications && medications.length > 0 ? (
-            <div className="divide-y divide-stone-50">
+            <div className="divide-y divide-stone-50 dark:divide-stone-800">
               {medications.map((med) => {
                 // Find today's dose log for this medication (if any)
                 const todayDose = doseLogs?.find((d: any) => d.medication_id === med.id);
@@ -214,7 +214,7 @@ export default async function DashboardPage() {
                 return (
                   <div
                     key={med.id}
-                    className="relative flex items-center justify-between px-6 py-4 hover:bg-stone-50/50 transition-colors"
+                    className="relative flex items-center justify-between px-6 py-4 hover:bg-stone-50/50 dark:hover:bg-stone-800/50 transition-colors"
                   >
                     {todayDose ? (
                       <div className={`absolute left-0 top-0 bottom-0 w-1 ${
@@ -231,18 +231,18 @@ export default async function DashboardPage() {
                       <div
                         className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                           status === "taken"
-                            ? "bg-emerald-50 text-emerald-600"
+                            ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400"
                             : status === "missed"
-                            ? "bg-red-50 text-red-500"
+                            ? "bg-red-50 dark:bg-red-900/20 text-red-500 dark:text-red-400"
                             : status === "skipped"
-                            ? "bg-amber-50 text-amber-600"
-                            : "bg-primary-fixed-dim/20 text-primary"
+                            ? "bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400"
+                            : "bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400"
                         }`}
                       >
                         <Pill className="w-5 h-5" />
                       </div>
                       <div>
-                        <p className="font-semibold text-stone-900 text-sm">
+                        <p className="font-semibold text-stone-900 dark:text-stone-100 text-sm">
                           {med.name}
                         </p>
                         <p className="text-xs text-stone-400">
@@ -255,7 +255,7 @@ export default async function DashboardPage() {
                     {todayDose ? (
                       <DoseAction doseId={todayDose.id} currentStatus={todayDose.status} />
                     ) : (
-                      <span className="text-xs font-medium text-stone-400 bg-stone-50 px-3 py-1.5 rounded-lg">
+                      <span className="text-xs font-medium text-stone-400 bg-stone-50 dark:bg-stone-800 px-3 py-1.5 rounded-lg">
                         No dose today
                       </span>
                     )}
@@ -265,16 +265,16 @@ export default async function DashboardPage() {
             </div>
           ) : (
             <div className="px-6 py-12 text-center">
-              <div className="w-14 h-14 rounded-2xl bg-stone-50 flex items-center justify-center mx-auto mb-4">
-                <Pill className="w-7 h-7 text-stone-300" />
+              <div className="w-14 h-14 rounded-2xl bg-stone-50 dark:bg-stone-800 flex items-center justify-center mx-auto mb-4">
+                <Pill className="w-7 h-7 text-stone-300 dark:text-stone-600" />
               </div>
-              <p className="text-stone-500 font-medium mb-1">No medications yet</p>
+              <p className="text-stone-500 dark:text-stone-400 font-medium mb-1">No medications yet</p>
               <p className="text-sm text-stone-400 mb-6">
                 Add medications to start tracking your doses.
               </p>
               <Link
                 href="/medications/add"
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-700 text-white text-sm font-bold rounded-lg hover:bg-teal-800 transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-700 dark:bg-teal-600 text-white text-sm font-bold rounded-lg hover:bg-teal-800 dark:hover:bg-teal-700 transition-colors"
               >
                 <Plus className="w-4 h-4" /> Add Medication
               </Link>
@@ -284,12 +284,12 @@ export default async function DashboardPage() {
 
         {/* Health Vitals Sidebar */}
         <div className="space-y-4">
-          <div className="bg-white rounded-2xl border border-stone-100 overflow-hidden">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-stone-50">
-              <h2 className="text-base font-bold text-stone-900">Latest Vitals</h2>
+          <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 overflow-hidden">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-stone-50 dark:border-stone-800">
+              <h2 className="text-base font-bold text-stone-900 dark:text-stone-100">Latest Vitals</h2>
               <Link
                 href="/health"
-                className="text-xs font-bold text-teal-700 hover:underline underline-offset-4"
+                className="text-xs font-bold text-teal-700 dark:text-teal-400 hover:underline underline-offset-4"
               >
                 Log New
               </Link>
@@ -300,28 +300,28 @@ export default async function DashboardPage() {
                 label="Sleep"
                 value={latestSleep ? `${latestSleep.value}` : "--"}
                 unit="hrs"
-                color="bg-indigo-50 text-indigo-600"
+                color="bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400"
               />
               <VitalCard
                 icon={<Footprints className="w-4 h-4" />}
                 label="Steps"
                 value={latestSteps ? `${Number(latestSteps.value).toLocaleString()}` : "--"}
                 unit=""
-                color="bg-emerald-50 text-emerald-600"
+                color="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400"
               />
               <VitalCard
                 icon={<Activity className="w-4 h-4" />}
                 label="Heart Rate"
                 value={latestHeart ? `${latestHeart.value}` : "--"}
                 unit="bpm"
-                color="bg-rose-50 text-rose-500"
+                color="bg-rose-50 dark:bg-rose-900/20 text-rose-500 dark:text-rose-400"
               />
               <VitalCard
                 icon={<Weight className="w-4 h-4" />}
                 label="Weight"
                 value={latestWeight ? `${latestWeight.value}` : "--"}
                 unit="kg"
-                color="bg-amber-50 text-amber-600"
+                color="bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400"
               />
             </div>
           </div>
@@ -367,41 +367,41 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Link
           href="/medications/add"
-          className="group bg-white rounded-2xl p-5 border border-stone-100 hover:border-teal-200 hover:shadow-md transition-all text-center"
+          className="group bg-white dark:bg-stone-900 rounded-2xl p-5 border border-stone-100 dark:border-stone-800 hover:border-teal-200 dark:hover:border-teal-800 hover:shadow-md transition-all text-center"
         >
-          <div className="w-12 h-12 rounded-xl bg-teal-50 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-            <Plus className="w-5 h-5 text-teal-700" />
+          <div className="w-12 h-12 rounded-xl bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+            <Plus className="w-5 h-5 text-teal-700 dark:text-teal-400" />
           </div>
-          <p className="text-sm font-bold text-stone-700">Add Medication</p>
+          <p className="text-sm font-bold text-stone-700 dark:text-stone-300">Add Medication</p>
         </Link>
         <Link
           href="/health/add"
-          className="group bg-white rounded-2xl p-5 border border-stone-100 hover:border-teal-200 hover:shadow-md transition-all text-center"
+          className="group bg-white dark:bg-stone-900 rounded-2xl p-5 border border-stone-100 dark:border-stone-800 hover:border-teal-200 dark:hover:border-teal-800 hover:shadow-md transition-all text-center"
         >
-          <div className="w-12 h-12 rounded-xl bg-rose-50 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-            <HeartPulse className="w-5 h-5 text-rose-500" />
+          <div className="w-12 h-12 rounded-xl bg-rose-50 dark:bg-rose-900/20 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+            <HeartPulse className="w-5 h-5 text-rose-500 dark:text-rose-400" />
           </div>
-          <p className="text-sm font-bold text-stone-700">Log Health Data</p>
+          <p className="text-sm font-bold text-stone-700 dark:text-stone-300">Log Health Data</p>
         </Link>
         <a
           href="https://www.1mg.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="group bg-white rounded-2xl p-5 border border-stone-100 hover:border-teal-200 hover:shadow-md transition-all text-center"
+          className="group bg-white dark:bg-stone-900 rounded-2xl p-5 border border-stone-100 dark:border-stone-800 hover:border-teal-200 dark:hover:border-teal-800 hover:shadow-md transition-all text-center"
         >
-          <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-            <Pill className="w-5 h-5 text-blue-600" />
+          <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+            <Pill className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           </div>
-          <p className="text-sm font-bold text-stone-700">Refill Meds</p>
+          <p className="text-sm font-bold text-stone-700 dark:text-stone-300">Refill Meds</p>
         </a>
         <Link
           href="/reports"
-          className="group bg-white rounded-2xl p-5 border border-stone-100 hover:border-teal-200 hover:shadow-md transition-all text-center"
+          className="group bg-white dark:bg-stone-900 rounded-2xl p-5 border border-stone-100 dark:border-stone-800 hover:border-teal-200 dark:hover:border-teal-800 hover:shadow-md transition-all text-center"
         >
-          <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-            <TrendingUp className="w-5 h-5 text-purple-600" />
+          <div className="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+            <TrendingUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
           </div>
-          <p className="text-sm font-bold text-stone-700">View Reports</p>
+          <p className="text-sm font-bold text-stone-700 dark:text-stone-300">View Reports</p>
         </Link>
       </div>
     </div>
@@ -422,13 +422,13 @@ function VitalCard({
   color: string;
 }) {
   return (
-    <div className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-stone-50/50 transition-colors">
+    <div className="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-stone-50/50 dark:hover:bg-stone-800/50 transition-colors">
       <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${color}`}>
         {icon}
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-xs text-stone-400 font-medium">{label}</p>
-        <p className="text-sm font-bold text-stone-900">
+        <p className="text-sm font-bold text-stone-900 dark:text-stone-100">
           {value} <span className="text-xs font-normal text-stone-400">{unit}</span>
         </p>
       </div>

@@ -110,7 +110,7 @@ export default function AddMedicationPage() {
         )}
 
         {/* Identity Section */}
-        <div className="bg-white rounded-2xl border border-stone-100 p-6 space-y-5">
+        <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 p-6 space-y-5">
           <h2 className="text-sm font-bold text-stone-400 uppercase tracking-widest">
             Identity
           </h2>
@@ -166,7 +166,7 @@ export default function AddMedicationPage() {
         </div>
 
         {/* Schedule Section */}
-        <div className="bg-white rounded-2xl border border-stone-100 p-6 space-y-5">
+        <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 p-6 space-y-5">
           <h2 className="text-sm font-bold text-stone-400 uppercase tracking-widest">
             Schedule
           </h2>
@@ -251,7 +251,7 @@ export default function AddMedicationPage() {
         </div>
 
         {/* Inventory Section */}
-        <div className="bg-white rounded-2xl border border-stone-100 p-6 space-y-5">
+        <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 p-6 space-y-5">
           <h2 className="text-sm font-bold text-stone-400 uppercase tracking-widest">
             Inventory & Notes
           </h2>

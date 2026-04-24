@@ -41,12 +41,12 @@ export default function NotificationsPage() {
       ) : (
         <ul className="space-y-4">
           {notifications.map((n) => (
-            <li key={n.id} className="bg-white rounded-xl border border-stone-100 p-4 shadow-sm">
+            <li key={n.id} className="bg-white dark:bg-stone-900 rounded-xl border border-stone-100 dark:border-stone-800 p-4 shadow-sm">
               <div className="flex items-center space-x-2 mb-2">
                 <Bell className="w-5 h-5 text-teal-600" />
-                <h2 className="text-lg font-semibold text-stone-900">{n.title}</h2>
+                  <h3 className="font-semibold text-stone-900 dark:text-stone-100">{n.title}</h3>
               </div>
-              <p className="text-sm text-stone-600 mb-1">{n.message}</p>
+                <p className="text-sm text-stone-600 dark:text-stone-400 mt-1">{n.message}</p>
               <p className="text-xs text-stone-400">{new Date(n.created_at).toLocaleString()}</p>
             </li>
           ))}

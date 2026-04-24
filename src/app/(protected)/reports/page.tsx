@@ -128,7 +128,7 @@ export default function ReportsPage() {
           {activeReports.map((report) => (
             <div
               key={report.id}
-              className="bg-white rounded-2xl border border-stone-100 p-5 hover:shadow-md transition-all group"
+              className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 p-5 hover:border-teal-200 dark:hover:border-teal-800 hover:shadow-md transition-all group"
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4">
@@ -196,14 +196,14 @@ export default function ReportsPage() {
           ))}
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-stone-100 p-16 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-stone-50 flex items-center justify-center mx-auto mb-5">
-            <FileText className="w-8 h-8 text-stone-300" />
+        <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 p-16 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-stone-50 dark:bg-stone-800 flex items-center justify-center mx-auto mb-5">
+            <FileText className="w-8 h-8 text-stone-300 dark:text-stone-600" />
           </div>
-          <h3 className="font-bold text-stone-900 text-lg mb-2">
+          <h3 className="font-bold text-stone-900 dark:text-stone-100 text-lg mb-2">
             No active reports
           </h3>
-          <p className="text-stone-500 text-sm mb-8 max-w-sm mx-auto">
+          <p className="text-stone-500 dark:text-stone-400 text-sm mb-8 max-w-sm mx-auto">
             Generate a report to create a secure, shareable link for your
             healthcare provider.
           </p>

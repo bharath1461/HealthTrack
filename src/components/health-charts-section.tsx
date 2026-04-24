@@ -17,9 +17,12 @@ export function HealthChartsSection({ charts }: { charts: ChartInfo[] }) {
   const selected = charts.find((c) => c.type === activeChart);
 
   return (
-    <div className="bg-white rounded-2xl border border-stone-100 overflow-hidden">
-      <div className="px-6 py-5 border-b border-stone-50">
-        <h2 className="text-lg font-bold text-stone-900 mb-4">Trends</h2>
+    <div className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 overflow-hidden">
+      <div className="flex items-center justify-between px-6 py-5 border-b border-stone-50 dark:border-stone-800">
+        <div>
+          <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100 mb-1">Health Trends</h2>
+          <p className="text-sm text-stone-500 dark:text-stone-400">Your vitals over the last 30 days</p>
+        </div>
         <div className="flex flex-wrap gap-2">
           {charts.map((chart) => (
             <button
@@ -27,8 +30,8 @@ export function HealthChartsSection({ charts }: { charts: ChartInfo[] }) {
               onClick={() => setActiveChart(chart.type)}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                 activeChart === chart.type
-                  ? "bg-teal-700 text-white shadow-sm"
-                  : "bg-stone-50 text-stone-500 hover:bg-stone-100"
+                  ? "bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 font-semibold"
+                  : "text-stone-500 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800"
               }`}
             >
               {chart.label}
