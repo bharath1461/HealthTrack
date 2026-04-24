@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { Check, X, SkipForward } from "lucide-react";
 
 interface DoseActionProps {
   doseId: string;
@@ -29,47 +28,45 @@ export function DoseAction({ doseId, currentStatus }: DoseActionProps) {
     setLoading(false);
   };
 
-  if (currentStatus !== "pending") {
+  if (currentStatus === "taken") {
     return (
-      <span
-        className={`text-xs font-bold px-3 py-1.5 rounded-lg ${
-          currentStatus === "taken"
-            ? "bg-emerald-50 text-emerald-700"
-            : currentStatus === "missed"
-            ? "bg-red-50 text-red-600"
-            : "bg-amber-50 text-amber-700"
-        }`}
-      >
-        {currentStatus.charAt(0).toUpperCase() + currentStatus.slice(1)}
+      <span className="px-3 py-2 bg-primary text-white text-xs font-bold rounded-lg">
+        Taken
+      </span>
+    );
+  }
+
+  if (currentStatus === "skipped") {
+    return (
+      <span className="px-3 py-2 bg-surface-container text-stone-700 text-xs font-bold rounded-lg">
+        Skipped
+      </span>
+    );
+  }
+
+  if (currentStatus === "missed") {
+    return (
+      <span className="px-3 py-2 bg-red-50 text-red-600 text-xs font-bold rounded-lg">
+        Missed
       </span>
     );
   }
 
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-2">
       <button
         onClick={() => updateDose("taken")}
         disabled={loading}
-        className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 flex items-center justify-center transition-colors disabled:opacity-50"
-        title="Mark as taken"
+        className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
       >
-        <Check className="w-4 h-4" />
+        Mark Taken
       </button>
       <button
         onClick={() => updateDose("skipped")}
         disabled={loading}
-        className="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 hover:bg-amber-100 flex items-center justify-center transition-colors disabled:opacity-50"
-        title="Skip"
+        className="px-4 py-2 bg-surface-container-high text-stone-700 text-sm font-semibold rounded-lg hover:bg-stone-200 transition-colors disabled:opacity-50"
       >
-        <SkipForward className="w-4 h-4" />
-      </button>
-      <button
-        onClick={() => updateDose("missed")}
-        disabled={loading}
-        className="w-9 h-9 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition-colors disabled:opacity-50"
-        title="Mark as missed"
-      >
-        <X className="w-4 h-4" />
+        Skip
       </button>
     </div>
   );

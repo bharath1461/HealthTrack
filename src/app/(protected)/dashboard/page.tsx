@@ -191,9 +191,20 @@ export default async function DashboardPage() {
                 return (
                   <div
                     key={med.id}
-                    className="flex items-center justify-between px-6 py-4 hover:bg-stone-50/50 transition-colors"
+                    className="relative flex items-center justify-between px-6 py-4 hover:bg-stone-50/50 transition-colors"
                   >
-                    <div className="flex items-center gap-4">
+                    {todayDose ? (
+                      <div className={`absolute left-0 top-0 bottom-0 w-1 ${
+                        status === "taken"
+                          ? "bg-primary"
+                          : status === "missed"
+                          ? "bg-red-500"
+                          : status === "skipped"
+                          ? "bg-tertiary-fixed"
+                          : "bg-primary"
+                      }`} />
+                    ) : null}
+                    <div className="flex items-center gap-4 pl-3">
                       <div
                         className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                           status === "taken"
@@ -202,7 +213,7 @@ export default async function DashboardPage() {
                             ? "bg-red-50 text-red-500"
                             : status === "skipped"
                             ? "bg-amber-50 text-amber-600"
-                            : "bg-teal-50 text-teal-700"
+                            : "bg-primary-fixed-dim/20 text-primary"
                         }`}
                       >
                         <Pill className="w-5 h-5" />
